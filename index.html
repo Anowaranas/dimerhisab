@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ডিমের হিসাব — ডিজিটাল আড়ত খাতা ও ক্যাশ মেমো</title>
+  <meta name="description" content="ডিমের আড়তদার, পাইকারি ব্যবসায়ী ও খামারিদের জন্য আধুনিক ডিজিটাল হিসাব খাতা, ক্যাশ মেমো ও মহাজন চালান অ্যাপ।" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #F1F5F9;
+      --surface: #FFFFFF;
+      --surface-alt: #F8FAFC;
+      --header: #0F172A;
+      --body: #1E293B;
+      --muted: #475569;
+      --border: #CBD5E1;
+      --emerald: #047857;
+      --mint-bg: #F0FDF4;
+      --mint-bd: #86EFAC;
+      --b0-bg: #ECFDF5; --b0-bd: #6EE7B7; --b0-ac: #047857; --b0-tag: #D1FAE5; --b0-tt: #064E3B;
+      --b1-bg: #EFF6FF; --b1-bd: #93C5FD; --b1-ac: #1D4ED8; --b1-tag: #DBEAFE; --b1-tt: #1E3A8A;
+      --b2-bg: #FFFBEB; --b2-bd: #FCD34D; --b2-ac: #B45309; --b2-tag: #FEF3C7; --b2-tt: #78350F;
+      --b3-bg: #F5F3FF; --b3-bd: #C4B5FD; --b3-ac: #6D28D9; --b3-tag: #EDE9FE; --b3-tt: #4C1D95;
+      --b4-bg: #ECFEFF; --b4-bd: #67E8F9; --b4-ac: #0E7490; --b4-tag: #CFFAFE; --b4-tt: #155E75;
+      --b5-bg: #FFF1F2; --b5-bd: #FDA4AF; --b5-ac: #BE123C; --b5-tag: #FFE4E6; --b5-tt: #881337;
+      --egg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='132' viewBox='0 0 120 132'%3E%3Cg transform='translate(28,28) rotate(-18 12 15)'%3E%3Cpath d='M12 1C18 1 23 11 23 19C23 26 18 30 12 30C6 30 1 26 1 19C1 11 6 1 12 1Z' fill='%23047857' fill-opacity='0.04' stroke='%23047857' stroke-opacity='0.075' stroke-width='1.1'/%3E%3C/g%3E%3Cg transform='translate(86,92) rotate(15 10 13) scale(0.86)'%3E%3Cpath d='M12 1C18 1 23 11 23 19C23 26 18 30 12 30C6 30 1 26 1 19C1 11 6 1 12 1Z' fill='%23B45309' fill-opacity='0.035' stroke='%23B45309' stroke-opacity='0.065' stroke-width='1.1'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    body.dark {
+      --bg: #0B0F17;
+      --surface: #161D2A;
+      --surface-alt: #1E293B;
+      --header: #F8FAFC;
+      --body: #E2E8F0;
+      --muted: #94A3B8;
+      --border: #334155;
+      --emerald: #10B981;
+      --mint-bg: #0D2922;
+      --mint-bd: #10B981;
+      --b0-bg: #0D2922; --b0-bd: #10B981; --b0-ac: #34D399; --b0-tag: #064E3B; --b0-tt: #ECFDF5;
+      --b1-bg: #132342; --b1-bd: #3B82F6; --b1-ac: #60A5FA; --b1-tag: #1E3A8A; --b1-tt: #EFF6FF;
+      --b2-bg: #2B2011; --b2-bd: #F59E0B; --b2-ac: #FBBF24; --b2-tag: #451A03; --b2-tt: #FFFBEB;
+      --b3-bg: #22163A; --b3-bd: #8B5CF6; --b3-ac: #A78BFA; --b3-tag: #3B0764; --b3-tt: #F5F3FF;
+      --b4-bg: #0E2933; --b4-bd: #06B6D4; --b4-ac: #22D3EE; --b4-tag: #164E63; --b4-tt: #ECFEFF;
+      --b5-bg: #2F141C; --b5-bd: #F43F5E; --b5-ac: #FB7185; --b5-tag: #4C0519; --b5-tt: #FFF1F2;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Hind Siliguri', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background-color: var(--bg);
+      background-image: var(--egg);
+      color: var(--body);
+      line-height: 1.6;
+    }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+    .topbar {
+      position: sticky; top: 0; z-index: 40;
+      background: var(--surface);
+      border-bottom: 1.5px solid var(--border);
+      box-shadow: 0 3px 12px rgba(15, 23, 42, 0.06);
+    }
+    .topbar-inner { padding: 12px 0; display: flex; flex-direction: column; gap: 10px; }
+    .brand-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .brand-left { display: flex; align-items: center; gap: 12px; }
+    .app-icon {
+      width: 44px; height: 44px; border-radius: 14px;
+      background: linear-gradient(135deg, #047857, #059669, #10B981);
+      border: 1.5px solid rgba(52, 211, 153, 0.7);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 21px;
+      box-shadow: 0 4px 10px rgba(4, 120, 87, 0.25);
+    }
+    .brand-title { font-size: 22px; font-weight: 700; color: var(--header); line-height: 1.15; }
+    .brand-sub { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #10B981; display: inline-block; }
+    .theme-btn {
+      border: 1.4px solid var(--border); background: var(--surface-alt); color: var(--header);
+      border-radius: 12px; padding: 7px 12px; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+    }
+    .capsule-nav {
+      background: var(--surface-alt); border: 1.4px solid var(--border);
+      border-radius: 14px; padding: 4px;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;
+    }
+    .nav-pill {
+      text-decoration: none; text-align: center; padding: 7px 4px; border-radius: 10px;
+      font-size: 13px; font-weight: 700; color: var(--header);
+    }
+    .nav-pill.active, .nav-pill:hover {
+      background: linear-gradient(90deg, #047857, #059669, #10B981);
+      color: #FFFFFF; box-shadow: 0 2px 6px rgba(4, 120, 87, 0.24);
+    }
+    main { padding: 20px 0 44px; display: flex; flex-direction: column; gap: 22px; }
+    .hero {
+      background: var(--mint-bg); border: 1.5px solid var(--mint-bd); border-radius: 18px;
+      padding: 22px; display: grid; grid-template-columns: 1.25fr 1fr; gap: 18px; align-items: center;
+      box-shadow: 0 6px 18px rgba(4, 120, 87, 0.08);
+    }
+    .chip {
+      display: inline-block; background: var(--b0-tag); color: var(--b0-tt);
+      border: 1px solid var(--b0-bd); padding: 4px 12px; border-radius: 999px;
+      font-size: 12.5px; font-weight: 700; margin-bottom: 10px;
+    }
+    .hero h1 { font-size: 29px; line-height: 1.25; color: var(--header); margin-bottom: 8px; }
+    .hero p { font-size: 14.5px; color: var(--muted); margin-bottom: 16px; }
+    .cta-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-primary {
+      text-decoration: none; background: linear-gradient(90deg, #047857, #059669);
+      color: #fff; border: 1px solid #34D399; padding: 11px 18px; border-radius: 12px;
+      font-size: 14.5px; font-weight: 700; box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25);
+    }
+    .btn-soft {
+      text-decoration: none; background: var(--surface); color: var(--header);
+      border: 1.4px solid var(--border); padding: 11px 16px; border-radius: 12px;
+      font-size: 14px; font-weight: 700;
+    }
+    .preview {
+      background: var(--surface); border: 1.5px solid var(--border); border-radius: 16px; padding: 14px;
+    }
+    .preview-head { display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 700; color: var(--muted); margin-bottom: 10px; }
+    .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+    .kpi { border-radius: 12px; padding: 10px; border: 1.3px solid; }
+    .kpi small { display: block; font-size: 11.5px; font-weight: 600; }
+    .kpi strong { font-size: 16.5px; font-weight: 700; }
+    .egg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .egg-pill {
+      background: var(--surface-alt); border: 1px solid var(--border); border-radius: 10px;
+      padding: 6px 8px; font-size: 12px; font-weight: 700; color: var(--header);
+      display: flex; justify-content: space-between;
+    }
+    .sec-title { font-size: 20px; font-weight: 700; color: var(--header); display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .bar { width: 5px; height: 22px; border-radius: 999px; background: linear-gradient(180deg, #047857, #10B981); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+    .box { border-radius: 16px; padding: 17px; border: 1.5px solid; }
+    .box-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .ic { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 17px; }
+    .box h3 { font-size: 16px; font-weight: 700; }
+    .box p { font-size: 14px; color: var(--muted); }
+    .b0 { background: var(--b0-bg); border-color: var(--b0-bd); } .b0 .ic { background: var(--b0-tag); } .b0 h3, .b0 strong, .b0 small { color: var(--b0-tt); }
+    .b1 { background: var(--b1-bg); border-color: var(--b1-bd); } .b1 .ic { background: var(--b1-tag); } .b1 h3, .b1 strong, .b1 small { color: var(--b1-tt); }
+    .b2 { background: var(--b2-bg); border-color: var(--b2-bd); } .b2 .ic { background: var(--b2-tag); } .b2 h3, .b2 strong, .b2 small { color: var(--b2-tt); }
+    .b3 { background: var(--b3-bg); border-color: var(--b3-bd); } .b3 .ic { background: var(--b3-tag); } .b3 h3 { color: var(--b3-tt); }
+    .b4 { background: var(--b4-bg); border-color: var(--b4-bd); } .b4 .ic { background: var(--b4-tag); } .b4 h3 { color: var(--b4-tt); }
+    .b5 { background: var(--b5-bg); border-color: var(--b5-bd); } .b5 .ic { background: var(--b5-tag); } .b5 h3, .b5 strong, .b5 small { color: var(--b5-tt); }
+    .policy {
+      background: var(--surface); border: 1.5px solid var(--border); border-radius: 18px; padding: 22px;
+    }
+    .policy h3 { font-size: 16px; color: var(--emerald); margin: 14px 0 5px; }
+    .policy p, .policy li { font-size: 14.5px; color: var(--muted); }
+    .policy ul { padding-left: 20px; margin-top: 5px; }
+    .policy a, footer a { color: var(--emerald); font-weight: 700; text-decoration: none; }
+    .contact {
+      background: var(--b1-bg); border: 1.5px solid var(--b1-bd); border-radius: 18px;
+      padding: 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+    }
+    .contact h3 { font-size: 17px; color: var(--b1-tt); }
+    .contact p { font-size: 14px; color: var(--muted); }
+    footer {
+      background: var(--surface); border-top: 1.5px solid var(--border);
+      padding: 20px 16px; text-align: center; font-size: 13.5px; color: var(--muted);
+    }
+    @media (max-width: 760px) {
+      .hero { grid-template-columns: 1fr; padding: 18px; }
+      .hero h1 { font-size: 24px; }
+      .brand-title { font-size: 19px; }
+      .nav-pill { font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand-row">
+        <div class="brand-left">
+          <div class="app-icon">🥚</div>
+          <div>
+            <div class="brand-title">ডিমের হিসাব</div>
+            <div class="brand-sub"><span class="dot"></span> ডিজিটাল আড়ত খাতা • অফলাইন ও ক্লাউড সিঙ্ক</div>
+          </div>
+        </div>
+        <button class="theme-btn" id="themeBtn" type="button">🌙 ডার্ক</button>
+      </div>
+      <nav class="capsule-nav" aria-label="প্রধান মেনু">
+        <a class="nav-pill active" href="#home">হোম</a>
+        <a class="nav-pill" href="#features">সুবিধাসমূহ</a>
+        <a class="nav-pill" href="#privacy">প্রাইভেসি</a>
+        <a class="nav-pill" href="#contact">যোগাযোগ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="home" class="hero">
+      <div>
+        <span class="chip">আড়তদার, পাইকারি ব্যবসায়ী ও খামারিদের অ্যাপ</span>
+        <h1>আপনার ডিমের ব্যবসার শতভাগ নিখুঁত ডিজিটাল খাতা</h1>
+        <p>কাগজের খাতার ঝামেলা ছেড়ে প্রতিদিনকার ডিম বিক্রি, মহাজনের চালান, নগদ জমা, পার্টি ও মহাজন বকেয়া হিসাব রাখুন এক অ্যাপে।</p>
+        <div class="cta-row">
+          <a class="btn-primary" href="https://play.google.com/store/apps/details?id=com.aistudio.dimerhisab.egghub" target="_blank" rel="noopener">Google Play ডাউনলোড</a>
+          <a class="btn-soft" href="#privacy">Privacy Policy</a>
+        </div>
+      </div>
+
+      <div class="preview" aria-label="অ্যাপ ড্যাশবোর্ড প্রিভিউ">
+        <div class="preview-head"><span>আজকের হিসাব প্রিভিউ</span><span style="color:#047857;">লাইভ ক্যালকুলেশন</span></div>
+        <div class="kpi-grid">
+          <div class="kpi b0"><small>মোট বিক্রি</small><strong>৳ ১,২৫,৪০০</strong></div>
+          <div class="kpi b1"><small>নগদ জমা</small><strong>৳ ৯৮,৫০০</strong></div>
+          <div class="kpi b5"><small>পার্টি বাকি</small><strong>৳ ২৬,৯০০</strong></div>
+          <div class="kpi b2"><small>মহাজন চালান</small><strong>৳ ১,১০,০০০</strong></div>
+        </div>
+        <div class="egg-row">
+          <div class="egg-pill"><span>🔴 লাল ডিম</span><span>৬,৫০০ পিস</span></div>
+          <div class="egg-pill"><span>⚪ সাদা ডিম</span><span>৪,২০০ পিস</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <h2 class="sec-title"><span class="bar"></span>অ্যাপের মূল সুবিধাসমূহ</h2>
+      <div class="grid">
+        <div class="box b0">
+          <div class="box-head"><div class="ic">🧾</div><h3>ডিজিটাল ক্যাশ মেমো</h3></div>
+          <p>লাল, সাদা, হাঁস ও কোয়েলের ডিমসহ ১০০ ডিমের দর অনুযায়ী স্বয়ংক্রিয় মোট টাকা, নগদ জমা ও বাকির হিসাব।</p>
+        </div>
+        <div class="box b1">
+          <div class="box-head"><div class="ic">🚚</div><h3>মহাজনের ক্রয় ও চালান</h3></div>
+          <p>খামারি বা মহাজনের কাছ থেকে ডিম ক্রয়ের চালান, পাওনা-দেনা ও পরিশোধের সম্পূর্ণ ইতিহাস সংরক্ষণ।</p>
+        </div>
+        <div class="box b2">
+          <div class="box-head"><div class="ic">📒</div><h3>পার্টি ও মহাজন খাতা</h3></div>
+          <p>প্রতিটি পার্টি ও মহাজনের আলাদা খতিয়ান, ফোনবুক থেকে নম্বর যোগ, এক ক্লিকে কল ও জমার পর অবশিষ্ট বাকি হিসাব।</p>
+        </div>
+        <div class="box b3">
+          <div class="box-head"><div class="ic">📄</div><h3>পিডিএফ (PDF) ও শেয়ার</h3></div>
+          <p>আড়তের নাম-ঠিকানাসহ প্রফেশনাল মেমো ও চালান সরাসরি WhatsApp, ইমু বা মেসেঞ্জারে শেয়ার ও প্রিন্ট করুন।</p>
+        </div>
+        <div class="box b4">
+          <div class="box-head"><div class="ic">☁️</div><h3>অফলাইন ও ক্লাউড ব্যাকআপ</h3></div>
+          <p>ইন্টারনেট ছাড়াই অফলাইনে ব্যবহার করুন এবং Google Sign-In করে ক্লাউডে নিরাপদ ব্যাকআপ ও রিস্টোর রাখুন।</p>
+        </div>
+        <div class="box b5">
+          <div class="box-head"><div class="ic">📊</div><h3>তারিখভিত্তিক বিক্রয় রিপোর্ট</h3></div>
+          <p>আজকের, গতকালের বা যেকোনো পূর্বের তারিখের বিক্রয় তালিকা দেখে এক ক্লিকেই বিস্তারিত মেমো খুলুন।</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="privacy">
+      <h2 class="sec-title"><span class="bar"></span>গোপনীয়তা নীতি (Privacy Policy)</h2>
+      <div class="policy">
+        <p><strong>অ্যাপের নাম:</strong> ডিমের হিসাব (Dimer Hisab) • <strong>প্যাকেজ:</strong> <code>com.aistudio.dimerhisab.egghub</code> • <strong>সাল:</strong> ২০২৬</p>
+        <h3>১. সংগৃহীত তথ্য</h3>
+        <ul>
+          <li><strong>ব্যবসায়িক হিসাব:</strong> মেমো, চালান, পার্টি ও মহাজনের নাম, ফোন নম্বর এবং লেনদেনের হিসাব আপনার ডিভাইসে সংরক্ষিত থাকে।</li>
+          <li><strong>অ্যাকাউন্ট তথ্য (ঐচ্ছিক):</strong> ক্লাউড ব্যাকআপের জন্য Google Sign-In করলে আপনার নাম ও ইমেইল Firebase-এ নিরাপদে সংরক্ষিত হয়।</li>
+          <li><strong>ফোনবুক অ্যাক্সেস:</strong> নম্বর যুক্ত করতে অ্যান্ড্রয়েডের নিরাপদ সিস্টেম কন্টাক্ট পিকার ব্যবহৃত হয়; পুরো কন্টাক্ট লিস্ট কখনোই সংগ্রহ করা হয় না।</li>
+        </ul>
+        <h3>২. তথ্যের নিরাপত্তা</h3>
+        <p>সমস্ত ক্লাউড ডেটা এনক্রিপ্টেড (HTTPS/TLS) সংযোগে স্থানান্তরিত হয় এবং কোনো তৃতীয় পক্ষের কাছে বিক্রি বা শেয়ার করা হয় না।</p>
+        <h3>৩. অ্যাকাউন্ট ও ডেটা মুছে ফেলা</h3>
+        <p>যেকোনো সময় অ্যাপের <strong>সেটিংস → প্রোফাইল / অ্যাকাউন্ট ডিলিট</strong> থেকে অথবা আমাদের ইমেইলে যোগাযোগ করে আপনার অ্যাকাউন্ট ও ক্লাউড ডেটা স্থায়ীভাবে মুছে ফেলতে পারবেন।</p>
+        <h3>৪. বিজ্ঞাপন (AdMob)</h3>
+        <p>অ্যাপে Google AdMob বিজ্ঞাপন ব্যবহৃত হলে Google-এর নিজস্ব গোপনীয়তা নীতি প্রযোজ্য হবে।</p>
+      </div>
+    </section>
+
+    <section id="contact" class="contact">
+      <div>
+        <h3>সহযোগিতা বা পরামর্শের জন্য যোগাযোগ করুন</h3>
+        <p>ইমেইল: anowar.hossain78699@gmail.com</p>
+      </div>
+      <a class="btn-primary" href="mailto:anowar.hossain78699@gmail.com">ইমেইল পাঠান</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p>© ২০২৬ ডিমের হিসাব (Dimer Hisab) • <a href="#privacy">Privacy Policy</a> • <a href="/app-ads.txt">app-ads.txt</a></p>
+    </div>
+  </footer>
+
+  <script>
+    const btn = document.getElementById('themeBtn');
+    btn.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      btn.textContent = document.body.classList.contains('dark') ? '☀️ লাইট' : '🌙 ডার্ক';
+    });
+  </script>
+</body>
+</html>
