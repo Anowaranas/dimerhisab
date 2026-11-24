@@ -264,6 +264,7 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-75L9Z9691P');
 </script>
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
 
@@ -436,5 +437,34 @@ gtag('config', 'G-75L9Z9691P');
       revealEls.forEach((el) => el.classList.add('in'));
     }
   </script>
+
+<button id="langToggle" aria-label="Language" style="position:fixed;right:16px;bottom:16px;z-index:9999;background:#101418;color:#fff;border:none;padding:10px 18px;border-radius:999px;font-weight:700;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.3)">EN</button>
+<script>
+if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').catch(() => {}); }
+(function () {
+  const DICT = {"আড়তদার, পাইকারি ব্যবসায়ী ও খামারিদের অ্যাপ": "The app for egg wholesalers, traders & farmers", "আপনার ডিমের ব্যবসার শতভাগ নিখুঁত ডিজিটাল খাতা": "A 100% accurate digital ledger for your egg business", "অ্যাপের মূল সুবিধাসমূহ": "Key Features", "অ্যাপের স্ক্রিনশট": "App Screenshots", "আসল অ্যাপের পর্দা — যেমনটা ফোনে দেখবেন": "Real app screens — exactly as on your phone", "গোপনীয়তা নীতি (Privacy Policy)": "Privacy Policy", "সাধারণ জিজ্ঞাসা": "Frequently Asked Questions", "ডিজিটাল ক্যাশ মেমো": "Digital Cash Memo", "মহাজনের ক্রয় ও চালান": "Supplier Purchases & Invoices", "পার্টি ও মহাজন খাতা": "Party & Supplier Ledger", "পিডিএফ (PDF) ও শেয়ার": "PDF & Sharing", "অফলাইন ও ক্লাউড ব্যাকআপ": "Offline & Cloud Backup", "তারিখভিত্তিক বিক্রয় রিপোর্ট": "Date-wise Sales Reports", "সহযোগিতা বা পরামর্শের জন্য যোগাযোগ করুন": "Contact us for help or suggestions", "ইমেইল পাঠান": "Send Email", "ডিমের হিসাব কাদের জন্য?": "Who is Dimer Hisab for?", "ক্যাশ মেমো কি প্রিন্ট করা যায়?": "Can I print cash memos?", "মহাজনের চালান ও বকেয়া হিসাব রাখা যাবে?": "Can I track supplier invoices and dues?", "আমার ব্যবসার ডেটা কি নিরাপদ?": "Is my business data safe?"};
+  const KEY = 'workspace/dimerhisab_lang';
+  const btn = document.getElementById('langToggle');
+  function walk(node, fn) {
+    node.childNodes.forEach(c => {
+      if (c.nodeType === 3) fn(c);
+      else if (c.nodeType === 1 && !['SCRIPT','STYLE'].includes(c.tagName)) walk(c, fn);
+    });
+  }
+  function apply(lang) {
+    walk(document.body, n => {
+      const t = n.nodeValue.trim();
+      if (!t) return;
+      if (lang === 'en' && DICT[t]) n.nodeValue = n.nodeValue.replace(t, DICT[t]);
+      if (lang === 'bn') { for (const k in DICT) if (DICT[k] === t) n.nodeValue = n.nodeValue.replace(t, k); }
+    });
+    btn.textContent = lang === 'en' ? 'বাংলা' : 'EN';
+    localStorage.setItem(KEY, lang);
+  }
+  let cur = localStorage.getItem(KEY) || 'bn';
+  if (cur === 'en') apply('en');
+  btn.addEventListener('click', () => { cur = cur === 'en' ? 'bn' : 'en'; apply(cur); });
+})();
+</script>
 </body>
 </html>
